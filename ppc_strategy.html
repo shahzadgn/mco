@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>30-60-90 Day Digital Marketing Strategy</title>
+    <title>30-60-90 Day Strategic Dashboard</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js -->
@@ -11,48 +11,75 @@
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Custom Palette & Styles -->
     <style>
+        /* --- Core Variables --- */
         :root {
-            --color-primary: #2563EB;
-            --color-secondary: #06B6D4;
-            --color-accent: #F59E0B;
+            --color-primary: #2563EB;   /* Royal Blue */
+            --color-secondary: #06B6D4; /* Cyan/Teal */
+            --color-accent: #F59E0B;    /* Amber/Gold */
+            --bg-sidebar: #0F172A;      /* Slate 900 */
+            --bg-content: #F8FAFC;      /* Slate 50 */
         }
 
         body {
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: #F1F5F9;
+            background-color: var(--bg-content);
             color: #334155;
-            overflow-x: hidden;
+            overflow: hidden; /* Prevent body scroll for sidebar layout */
         }
 
-        /* Chart Container - MANDATORY STYLING */
-        .chart-container {
-            position: relative;
-            width: 100%;
-            height: 350px;
-            max-height: 400px;
+        /* --- Sidebar Styling --- */
+        .sidebar {
+            width: 280px;
+            background-color: var(--bg-sidebar);
+            color: #CBD5E1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            flex-shrink: 0;
         }
 
-        /* Navigation Styling */
         .nav-link {
-            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
             border-left: 4px solid transparent;
+            color: #94A3B8;
         }
+
         .nav-link:hover {
             background-color: #1E293B;
             color: white;
         }
+
         .nav-link.active {
             background-color: #1E293B;
-            border-left-color: var(--color-secondary);
             color: white;
+            border-left-color: var(--color-secondary);
         }
 
-        /* Page Transitions */
+        .nav-icon {
+            width: 1.5rem;
+            margin-right: 0.75rem;
+            text-align: center;
+        }
+
+        /* --- Main Content Area --- */
+        .main-content {
+            flex: 1;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 2rem 3rem;
+            background-color: white;
+        }
+
+        /* --- Page Transitions --- */
         .page-section {
             display: none;
-            animation: fadeIn 0.4s ease-in-out;
+            animation: fadeIn 0.3s ease-in-out;
         }
         .page-section.active {
             display: block;
@@ -63,58 +90,105 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Card Styling */
+        /* --- Card Styles (Consistent with previous) --- */
         .card {
             background-color: white;
             border-radius: 0.75rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid #E2E8F0;
+            margin-bottom: 1.5rem;
         }
+
+        /* --- Chart Container --- */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 350px;
+            max-height: 400px;
+        }
+
+        /* --- Timeline Items --- */
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+            border-left: 2px solid #E2E8F0;
+            margin-bottom: 2rem;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -0.55rem;
+            top: 0.25rem;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background-color: white;
+            border: 3px solid var(--color-primary);
+        }
+        
+        /* Variants for Timeline */
+        .timeline-item.phase-2 { border-left-color: var(--color-secondary); }
+        .timeline-item.phase-2::before { border-color: var(--color-secondary); }
+        .timeline-item.phase-3 { border-left-color: var(--color-accent); }
+        .timeline-item.phase-3::before { border-color: var(--color-accent); }
+
     </style>
 </head>
-<body class="antialiased flex h-screen overflow-hidden">
+<body class="flex">
 
-    <!-- SIDEBAR NAVIGATION -->
-    <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col flex-shrink-0 h-full overflow-y-auto">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
         <div class="p-6 border-b border-slate-800">
-            <h1 class="text-xl font-bold text-white tracking-tight">Strategy<span class="text-cyan-400">Plan</span></h1>
+            <h1 class="text-xl font-bold text-white tracking-tight">Strategic<span class="text-cyan-400">Plan</span></h1>
             <div class="text-xs text-slate-500 mt-1">30-60-90 Day Roadmap</div>
         </div>
         
-        <nav class="flex-1 py-6 space-y-1">
-            <a href="#" onclick="showPage('page1')" id="nav-page1" class="nav-link active flex items-center px-6 py-3 text-sm font-medium">
-                <i class="fas fa-home w-6"></i> Executive Summary
+        <nav class="flex-1 py-4 space-y-1 overflow-y-auto">
+            <div class="px-6 py-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Strategy</div>
+            <a href="#" onclick="showPage('page1')" id="nav-page1" class="nav-link active">
+                <i class="fas fa-home nav-icon"></i> Executive Summary
             </a>
-            <a href="#" onclick="showPage('page2')" id="nav-page2" class="nav-link flex items-center px-6 py-3 text-sm font-medium">
-                <i class="fab fa-google w-6"></i> Google Ads Roadmap
+            <a href="#" onclick="showPage('page2')" id="nav-page2" class="nav-link">
+                <i class="fab fa-google nav-icon"></i> Google Ads Roadmap
             </a>
-            <a href="#" onclick="showPage('page3')" id="nav-page3" class="nav-link flex items-center px-6 py-3 text-sm font-medium">
-                <i class="fab fa-linkedin w-6"></i> LinkedIn Ads Roadmap
+            <a href="#" onclick="showPage('page3')" id="nav-page3" class="nav-link">
+                <i class="fab fa-linkedin nav-icon"></i> LinkedIn Ads Roadmap
             </a>
-            <a href="#" onclick="showPage('page4')" id="nav-page4" class="nav-link flex items-center px-6 py-3 text-sm font-medium">
-                <i class="fas fa-chart-pie w-6"></i> Budget & Media Plan
+            <a href="#" onclick="showPage('page4')" id="nav-page4" class="nav-link">
+                <i class="fas fa-chart-pie nav-icon"></i> Media Plan & Budget
             </a>
-            <a href="#" onclick="showPage('page5')" id="nav-page5" class="nav-link flex items-center px-6 py-3 text-sm font-medium">
-                <i class="fas fa-search w-6"></i> Keyword Intelligence
+            <a href="#" onclick="showPage('page5')" id="nav-page5" class="nav-link">
+                <i class="fas fa-search nav-icon"></i> Keyword Intelligence
             </a>
-            <a href="#" onclick="showPage('page6')" id="nav-page6" class="nav-link flex items-center px-6 py-3 text-sm font-medium">
-                <i class="fas fa-pencil-ruler w-6"></i> Creative & KPIs
+            <a href="#" onclick="showPage('page6')" id="nav-page6" class="nav-link">
+                <i class="fas fa-pencil-ruler nav-icon"></i> Creative & KPIs
+            </a>
+            
+            <div class="px-6 py-2 mt-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Execution</div>
+            <a href="#" onclick="showPage('page7')" id="nav-page7" class="nav-link">
+                <i class="fas fa-list-check nav-icon"></i> Master Timeline
+            </a>
+            <a href="#" onclick="showPage('page8')" id="nav-page8" class="nav-link">
+                <i class="fas fa-layer-group nav-icon"></i> Tech Stack
+            </a>
+            <a href="#" onclick="showPage('page9')" id="nav-page9" class="nav-link">
+                <i class="fas fa-shield-alt nav-icon"></i> Risks & Mitigation
             </a>
         </nav>
 
-        <div class="p-6 border-t border-slate-800 text-xs text-slate-500">
-            Generated Report<br>Feb 2026
+        <div class="p-4 border-t border-slate-800 text-xs text-slate-600 text-center">
+            Feb 2026 Edition
         </div>
     </aside>
 
-    <!-- MAIN CONTENT AREA -->
-    <main class="flex-1 h-full overflow-y-auto bg-slate-50 p-8 md:p-12 relative">
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
         
         <!-- PAGE 1: EXECUTIVE SUMMARY -->
         <div id="page1" class="page-section active max-w-5xl mx-auto">
             <header class="mb-10">
-                <div class="inline-block bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full uppercase mb-3">Page 1</div>
+                <div class="inline-block bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full uppercase mb-3">Overview</div>
                 <h2 class="text-4xl font-extrabold text-slate-900">Executive Summary & Vision</h2>
-                <p class="text-lg text-slate-600 mt-2">Transforming digital execution from broad scaling to precision targeting.</p>
             </header>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
@@ -135,7 +209,7 @@
                 </div>
             </div>
 
-            <div class="bg-white rounded-xl shadow-sm p-8">
+            <div class="card p-8 bg-slate-50 border-0">
                 <h3 class="text-xl font-bold text-slate-800 mb-4">Core Objectives</h3>
                 <div class="space-y-4">
                     <div class="flex">
@@ -163,17 +237,16 @@
             </div>
         </div>
 
-        <!-- PAGE 2: GOOGLE ADS ROADMAP -->
+        <!-- PAGE 2: GOOGLE ADS -->
         <div id="page2" class="page-section max-w-5xl mx-auto">
             <header class="mb-10">
-                <div class="inline-block bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full uppercase mb-3">Page 2</div>
-                <h2 class="text-4xl font-extrabold text-slate-900">Google Ads Roadmap</h2>
-                <p class="text-lg text-slate-600 mt-2">Detailed execution plan for Paid Search.</p>
+                <h2 class="text-3xl font-bold text-slate-900">Google Ads Roadmap</h2>
+                <p class="text-slate-500">Paid Search Execution Plan</p>
             </header>
 
-            <div class="space-y-8">
-                <!-- Month 1 -->
-                <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div class="space-y-6">
+                <!-- M1 -->
+                <div class="card overflow-hidden">
                     <div class="bg-blue-600 px-6 py-4 flex justify-between items-center text-white">
                         <h3 class="font-bold text-lg">Month 1: The Fix</h3>
                         <span class="bg-blue-800 text-xs px-2 py-1 rounded">Weeks 1-4</span>
@@ -182,31 +255,21 @@
                         <ul class="space-y-4">
                             <li class="flex items-start">
                                 <i class="fas fa-check-circle text-blue-600 mt-1 mr-3"></i>
-                                <div>
-                                    <strong class="block text-slate-800">Conversion Audit</strong>
-                                    <span class="text-sm text-slate-600">Move "PDF Downloads" to Secondary. Keep only "Book Demo" as Primary.</span>
-                                </div>
+                                <div><strong class="block text-slate-800">Conversion Audit</strong><span class="text-sm text-slate-600">Move "PDF Downloads" to Secondary. Keep only "Book Demo".</span></div>
                             </li>
                             <li class="flex items-start">
                                 <i class="fas fa-check-circle text-blue-600 mt-1 mr-3"></i>
-                                <div>
-                                    <strong class="block text-slate-800">URL Hygiene</strong>
-                                    <span class="text-sm text-slate-600">Audit all Final URLs for 404s. Implement 301 redirects for broken product pages.</span>
-                                </div>
+                                <div><strong class="block text-slate-800">URL Hygiene</strong><span class="text-sm text-slate-600">Audit Final URLs for 404s. Implement 301 redirects.</span></div>
                             </li>
                             <li class="flex items-start">
                                 <i class="fas fa-check-circle text-blue-600 mt-1 mr-3"></i>
-                                <div>
-                                    <strong class="block text-slate-800">Spend Stabilization</strong>
-                                    <span class="text-sm text-slate-600">Normalize daily budgets to prevent "feast or famine" spending spikes.</span>
-                                </div>
+                                <div><strong class="block text-slate-800">Spend Stabilization</strong><span class="text-sm text-slate-600">Normalize daily budgets to prevent volatility.</span></div>
                             </li>
                         </ul>
                     </div>
                 </div>
-
-                <!-- Month 2 -->
-                <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                <!-- M2 -->
+                <div class="card overflow-hidden">
                     <div class="bg-cyan-600 px-6 py-4 flex justify-between items-center text-white">
                         <h3 class="font-bold text-lg">Month 2: The Refine</h3>
                         <span class="bg-cyan-800 text-xs px-2 py-1 rounded">Weeks 5-8</span>
@@ -215,31 +278,17 @@
                         <ul class="space-y-4">
                             <li class="flex items-start">
                                 <i class="fas fa-check-circle text-cyan-600 mt-1 mr-3"></i>
-                                <div>
-                                    <strong class="block text-slate-800">Match Type Constriction</strong>
-                                    <span class="text-sm text-slate-600">Move "Regulatory Change" keywords to Phrase/Exact match to reduce waste.</span>
-                                </div>
+                                <div><strong class="block text-slate-800">Match Type Constriction</strong><span class="text-sm text-slate-600">Move "Regulatory Change" keywords to Phrase/Exact match.</span></div>
                             </li>
                             <li class="flex items-start">
                                 <i class="fas fa-check-circle text-cyan-600 mt-1 mr-3"></i>
-                                <div>
-                                    <strong class="block text-slate-800">Negative Mining</strong>
-                                    <span class="text-sm text-slate-600">Weekly exclusion of consumer terms (e.g., jobs, free, definition).</span>
-                                </div>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check-circle text-cyan-600 mt-1 mr-3"></i>
-                                <div>
-                                    <strong class="block text-slate-800">RSA Rebuild</strong>
-                                    <span class="text-sm text-slate-600">Rewrite ads to focus on specific solutions rather than generic features.</span>
-                                </div>
+                                <div><strong class="block text-slate-800">Negative Mining</strong><span class="text-sm text-slate-600">Weekly exclusion of consumer terms (jobs, free).</span></div>
                             </li>
                         </ul>
                     </div>
                 </div>
-
-                <!-- Month 3 -->
-                <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                <!-- M3 -->
+                <div class="card overflow-hidden">
                     <div class="bg-amber-600 px-6 py-4 flex justify-between items-center text-white">
                         <h3 class="font-bold text-lg">Month 3: The Scale</h3>
                         <span class="bg-amber-800 text-xs px-2 py-1 rounded">Weeks 9-12</span>
@@ -248,17 +297,11 @@
                         <ul class="space-y-4">
                             <li class="flex items-start">
                                 <i class="fas fa-check-circle text-amber-600 mt-1 mr-3"></i>
-                                <div>
-                                    <strong class="block text-slate-800">Paid Landing Pages</strong>
-                                    <span class="text-sm text-slate-600">Launch dedicated pages (no nav) for top 20% of keywords.</span>
-                                </div>
+                                <div><strong class="block text-slate-800">Paid Landing Pages</strong><span class="text-sm text-slate-600">Launch dedicated pages (no nav) for top keywords.</span></div>
                             </li>
                             <li class="flex items-start">
                                 <i class="fas fa-check-circle text-amber-600 mt-1 mr-3"></i>
-                                <div>
-                                    <strong class="block text-slate-800">Smart Bidding</strong>
-                                    <span class="text-sm text-slate-600">Enable Target CPA (tCPA) once conversion volume is stable.</span>
-                                </div>
+                                <div><strong class="block text-slate-800">Smart Bidding</strong><span class="text-sm text-slate-600">Enable Target CPA (tCPA) once conversion volume is stable.</span></div>
                             </li>
                         </ul>
                     </div>
@@ -266,95 +309,63 @@
             </div>
         </div>
 
-        <!-- PAGE 3: LINKEDIN ADS ROADMAP -->
+        <!-- PAGE 3: LINKEDIN ADS -->
         <div id="page3" class="page-section max-w-5xl mx-auto">
             <header class="mb-10">
-                <div class="inline-block bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full uppercase mb-3">Page 3</div>
-                <h2 class="text-4xl font-extrabold text-slate-900">LinkedIn Ads Roadmap</h2>
-                <p class="text-lg text-slate-600 mt-2">ABM and Account Targeting Strategy.</p>
+                <h2 class="text-3xl font-bold text-slate-900">LinkedIn Ads Roadmap</h2>
+                <p class="text-slate-500">Paid Social & ABM Strategy</p>
             </header>
 
-            <div class="space-y-8">
-                <div class="bg-white rounded-lg shadow-sm p-6 border-l-4 border-blue-600">
-                    <h3 class="text-xl font-bold text-slate-800 mb-4">Phase 1: Foundation (The "AND" Fix)</h3>
-                    <p class="text-slate-600 mb-4">Currently, targeting may use "OR" logic. We must switch to <strong>Job Title AND Account List</strong> to ensure we aren't paying for irrelevant roles.</p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="bg-slate-50 p-4 rounded text-sm">
-                            <strong>Funnel Reset:</strong>
-                            <ul class="list-disc pl-4 mt-2 text-slate-600">
-                                <li>TOF: Awareness (Ungated)</li>
-                                <li>MOF: Case Studies (Gated)</li>
-                                <li>BOF: Demo Request (High Intent)</li>
-                            </ul>
-                        </div>
-                        <div class="bg-slate-50 p-4 rounded text-sm">
-                            <strong>Creative Baseline:</strong>
-                            <ul class="list-disc pl-4 mt-2 text-slate-600">
-                                <li>Pause duplicate creatives.</li>
-                                <li>Select 1 control creative per concept.</li>
-                            </ul>
-                        </div>
+            <div class="space-y-6">
+                <div class="card p-6 border-l-4 border-blue-600">
+                    <h3 class="text-xl font-bold text-slate-800 mb-3">Phase 1: Foundation</h3>
+                    <p class="text-slate-600 mb-4">Switch targeting logic to <strong>Job Title AND Account List</strong> to eliminate waste.</p>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div class="bg-slate-50 p-3 rounded"><strong>Funnel Reset:</strong> Separate TOF/MOF/BOF.</div>
+                        <div class="bg-slate-50 p-3 rounded"><strong>Creative:</strong> Pause duplicates, set baseline.</div>
                     </div>
                 </div>
-
-                <div class="bg-white rounded-lg shadow-sm p-6 border-l-4 border-cyan-500">
-                    <h3 class="text-xl font-bold text-slate-800 mb-4">Phase 2: Expansion</h3>
-                    <ul class="space-y-3 text-slate-600">
-                        <li class="flex items-center"><i class="fas fa-arrow-right text-cyan-500 mr-2"></i> Expand industry targeting to Asset Management, Insurance, FinTech.</li>
-                        <li class="flex items-center"><i class="fas fa-arrow-right text-cyan-500 mr-2"></i> Launch "Risk Reduction" vs "Audit Readiness" message test.</li>
-                        <li class="flex items-center"><i class="fas fa-arrow-right text-cyan-500 mr-2"></i> Build MOF audiences from Solution Page visitors.</li>
+                
+                <div class="card p-6 border-l-4 border-cyan-500">
+                    <h3 class="text-xl font-bold text-slate-800 mb-3">Phase 2: Expansion</h3>
+                    <ul class="list-disc pl-5 text-slate-600 space-y-2">
+                        <li>Expand to Asset Management & FinTech.</li>
+                        <li>Test "Risk Reduction" vs "Audit Readiness" messaging.</li>
                     </ul>
                 </div>
 
-                <div class="bg-white rounded-lg shadow-sm p-6 border-l-4 border-amber-500">
-                    <h3 class="text-xl font-bold text-slate-800 mb-4">Phase 3: ROI Alignment</h3>
-                    <ul class="space-y-3 text-slate-600">
-                        <li class="flex items-center"><i class="fas fa-arrow-right text-amber-500 mr-2"></i> Shift budget to BOF (Demo) campaigns driving SQLs.</li>
-                        <li class="flex items-center"><i class="fas fa-arrow-right text-amber-500 mr-2"></i> Downgrade low-engagement accounts to Tier 2.</li>
-                        <li class="flex items-center"><i class="fas fa-arrow-right text-amber-500 mr-2"></i> Map LinkedIn data to HubSpot Opportunities for revenue tracking.</li>
+                <div class="card p-6 border-l-4 border-amber-500">
+                    <h3 class="text-xl font-bold text-slate-800 mb-3">Phase 3: ROI Alignment</h3>
+                    <ul class="list-disc pl-5 text-slate-600 space-y-2">
+                        <li>Shift budget to BOF (Demo) campaigns.</li>
+                        <li>Map LinkedIn data to HubSpot "Pipeline Influenced".</li>
                     </ul>
                 </div>
             </div>
         </div>
 
-        <!-- PAGE 4: BUDGET & MEDIA PLAN -->
+        <!-- PAGE 4: BUDGET -->
         <div id="page4" class="page-section max-w-5xl mx-auto">
             <header class="mb-10">
-                <div class="inline-block bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full uppercase mb-3">Page 4</div>
-                <h2 class="text-4xl font-extrabold text-slate-900">Media Plan & Budget</h2>
-                <p class="text-lg text-slate-600 mt-2">Monthly Allocation: <strong>$14,000</strong></p>
+                <h2 class="text-3xl font-bold text-slate-900">Media Plan & Budget</h2>
+                <p class="text-lg text-slate-600">Monthly Allocation: <strong>$14,000</strong></p>
             </header>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-12">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div>
                     <h3 class="text-2xl font-bold text-slate-800 mb-4">Allocation Strategy</h3>
                     <p class="text-slate-600 mb-6">
-                        Budget is heavily weighted (80%) towards high-intent users who are actively seeking solutions for Compliance, Risk, or Regulatory Change.
+                        Budget is heavily weighted (80%) towards high-intent users actively seeking solutions.
                     </p>
-                    <div class="space-y-4">
-                        <div class="flex justify-between items-center p-3 bg-white border border-slate-200 rounded">
-                            <span class="font-bold text-blue-700">Compliance Management</span>
-                            <span class="font-bold">$4,200 (30%)</span>
-                        </div>
-                        <div class="flex justify-between items-center p-3 bg-white border border-slate-200 rounded">
-                            <span class="font-bold text-cyan-600">Regulatory Change Mgmt</span>
-                            <span class="font-bold">$3,500 (25%)</span>
-                        </div>
-                        <div class="flex justify-between items-center p-3 bg-white border border-slate-200 rounded">
-                            <span class="font-bold text-blue-500">Risk & Compliance</span>
-                            <span class="font-bold">$3,500 (25%)</span>
-                        </div>
-                        <div class="flex justify-between items-center p-3 bg-white border border-slate-200 rounded">
-                            <span class="font-bold text-slate-500">Brand Protection</span>
-                            <span class="font-bold">$1,400 (10%)</span>
-                        </div>
-                        <div class="flex justify-between items-center p-3 bg-white border border-slate-200 rounded">
-                            <span class="font-bold text-amber-500">PMAX (6Sense)</span>
-                            <span class="font-bold">$1,400 (10%)</span>
-                        </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between p-3 border rounded bg-white"><span>Compliance Mgmt</span><span class="font-bold text-blue-700">$4,200 (30%)</span></div>
+                        <div class="flex justify-between p-3 border rounded bg-white"><span>Reg Change Mgmt</span><span class="font-bold text-cyan-600">$3,500 (25%)</span></div>
+                        <div class="flex justify-between p-3 border rounded bg-white"><span>Risk & Compliance</span><span class="font-bold text-blue-500">$3,500 (25%)</span></div>
+                        <div class="flex justify-between p-3 border rounded bg-white"><span>Brand</span><span class="font-bold text-slate-500">$1,400 (10%)</span></div>
+                        <div class="flex justify-between p-3 border rounded bg-white"><span>PMAX (6Sense)</span><span class="font-bold text-amber-500">$1,400 (10%)</span></div>
                     </div>
                 </div>
-                <div class="bg-white p-6 rounded-xl shadow-sm">
+                <div class="card p-6">
                     <div class="chart-container">
                         <canvas id="budgetChart"></canvas>
                     </div>
@@ -362,91 +373,141 @@
             </div>
         </div>
 
-        <!-- PAGE 5: KEYWORD INTELLIGENCE -->
+        <!-- PAGE 5: KEYWORDS -->
         <div id="page5" class="page-section max-w-5xl mx-auto">
             <header class="mb-10">
-                <div class="inline-block bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full uppercase mb-3">Page 5</div>
-                <h2 class="text-4xl font-extrabold text-slate-900">Keyword Intelligence</h2>
-                <p class="text-lg text-slate-600 mt-2">Strategic clusters based on CPC vs. Volume analysis.</p>
+                <h2 class="text-3xl font-bold text-slate-900">Keyword Intelligence</h2>
+                <p class="text-slate-500">CPC vs Volume Analysis</p>
             </header>
 
-            <div class="bg-white p-8 rounded-xl shadow-sm mb-8">
-                <div class="chart-container" style="height: 400px;">
+            <div class="card p-6 mb-8">
+                <div class="chart-container">
                     <canvas id="keywordChart"></canvas>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-600">
-                    <h3 class="font-bold text-blue-900 mb-2">The "Gold Mine"</h3>
-                    <p class="text-sm text-blue-800">
-                        <strong>Regulatory Change Mgmt</strong> ($62 CPC, Low Comp). High intent, worth the investment.
-                    </p>
+                <div class="card p-4 border-t-4 border-blue-600">
+                    <h4 class="font-bold text-blue-800">The "Gold Mine"</h4>
+                    <p class="text-sm text-slate-600"><strong>Reg Change Mgmt:</strong> High intent, low competition.</p>
                 </div>
-                <div class="bg-cyan-50 p-6 rounded-lg border-l-4 border-cyan-500">
-                    <h3 class="font-bold text-cyan-900 mb-2">The "Volume Trap"</h3>
-                    <p class="text-sm text-cyan-800">
-                        <strong>OCR Software</strong> (40k volume, $10 CPC). Likely consumer intent. Requires strict negative keywords.
-                    </p>
+                <div class="card p-4 border-t-4 border-cyan-500">
+                    <h4 class="font-bold text-cyan-800">The "Volume Trap"</h4>
+                    <p class="text-sm text-slate-600"><strong>OCR Software:</strong> High volume (40k), risky intent.</p>
                 </div>
-                <div class="bg-amber-50 p-6 rounded-lg border-l-4 border-amber-500">
-                    <h3 class="font-bold text-amber-900 mb-2">Niche Premium</h3>
-                    <p class="text-sm text-amber-800">
-                        <strong>Trade Surveillance</strong> ($700+ CPC). Ultra-specific. Use Exact Match and strict caps.
-                    </p>
+                <div class="card p-4 border-t-4 border-amber-500">
+                    <h4 class="font-bold text-amber-800">Niche Premium</h4>
+                    <p class="text-sm text-slate-600"><strong>Trade Surveillance:</strong> $700+ CPC. Exact match only.</p>
                 </div>
             </div>
         </div>
 
-        <!-- PAGE 6: CREATIVE & MEASUREMENT -->
+        <!-- PAGE 6: CREATIVE & KPIs -->
         <div id="page6" class="page-section max-w-5xl mx-auto">
             <header class="mb-10">
-                <div class="inline-block bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full uppercase mb-3">Page 6</div>
-                <h2 class="text-4xl font-extrabold text-slate-900">Creative & Measurement</h2>
-                <p class="text-lg text-slate-600 mt-2">Messaging frameworks and Success KPIs.</p>
+                <h2 class="text-3xl font-bold text-slate-900">Creative & Measurement</h2>
             </header>
 
-            <h3 class="text-2xl font-bold text-slate-800 mb-6">Messaging Angles</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                <div class="bg-white p-6 rounded-lg shadow-sm">
-                    <div class="text-3xl mb-4">⚠️</div>
-                    <h4 class="font-bold text-slate-800">Fear / Risk</h4>
-                    <p class="text-sm text-slate-600 italic mt-2">"Don't Let Regulators Catch You Off Guard"</p>
-                    <div class="mt-4 pt-4 border-t border-slate-100 text-xs text-slate-500">Target: Compliance Officers</div>
+                <div class="card p-6 text-center">
+                    <div class="text-3xl mb-2">⚠️</div>
+                    <h4 class="font-bold">Fear / Risk</h4>
+                    <p class="text-sm text-slate-600">"Don't Let Regulators Catch You Off Guard"</p>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow-sm">
-                    <div class="text-3xl mb-4">⏱️</div>
-                    <h4 class="font-bold text-slate-800">Efficiency</h4>
-                    <p class="text-sm text-slate-600 italic mt-2">"Cut Compliance Admin Time by 40%"</p>
-                    <div class="mt-4 pt-4 border-t border-slate-100 text-xs text-slate-500">Target: Ops Managers</div>
+                <div class="card p-6 text-center">
+                    <div class="text-3xl mb-2">⏱️</div>
+                    <h4 class="font-bold">Efficiency</h4>
+                    <p class="text-sm text-slate-600">"Cut Compliance Admin Time by 40%"</p>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow-sm">
-                    <div class="text-3xl mb-4">🤝</div>
-                    <h4 class="font-bold text-slate-800">Trust</h4>
-                    <p class="text-sm text-slate-600 italic mt-2">"The Standard in FinTech Compliance"</p>
-                    <div class="mt-4 pt-4 border-t border-slate-100 text-xs text-slate-500">Target: C-Suite</div>
+                <div class="card p-6 text-center">
+                    <div class="text-3xl mb-2">🤝</div>
+                    <h4 class="font-bold">Trust</h4>
+                    <p class="text-sm text-slate-600">"The Standard in FinTech Compliance"</p>
                 </div>
             </div>
 
-            <h3 class="text-2xl font-bold text-slate-800 mb-6">Measurement Stack</h3>
-            <div class="bg-slate-900 text-slate-300 rounded-xl p-8">
+            <div class="card p-8 bg-slate-900 text-slate-300 border-none">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
                         <h4 class="text-white font-bold mb-4">Leading Indicators (Weekly)</h4>
-                        <ul class="space-y-2">
-                            <li>• CTR (Ad Relevance)</li>
-                            <li>• Cost per Conversion (Form Fill)</li>
-                            <li>• Search Impression Share</li>
-                        </ul>
+                        <ul class="space-y-2 text-sm"><li>CTR</li><li>Cost per Conversion</li><li>Impression Share</li></ul>
                     </div>
                     <div>
                         <h4 class="text-white font-bold mb-4">Lagging Indicators (Monthly)</h4>
-                        <ul class="space-y-2">
-                            <li>• <span class="text-cyan-400 font-bold">SQL Rate:</span> % of leads scored as Qualified</li>
-                            <li>• <span class="text-cyan-400 font-bold">Pipeline Influenced:</span> Value of opps touched</li>
-                            <li>• <span class="text-cyan-400 font-bold">CAC:</span> Spend / Closed Won Deals</li>
-                        </ul>
+                        <ul class="space-y-2 text-sm"><li>SQL Rate</li><li>Pipeline Influenced</li><li>CAC</li></ul>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 7: MASTER TIMELINE -->
+        <div id="page7" class="page-section max-w-5xl mx-auto">
+            <header class="mb-10">
+                <h2 class="text-3xl font-bold text-slate-900">Master Execution Timeline</h2>
+            </header>
+            <div class="card p-8">
+                <div class="space-y-8">
+                    <div class="timeline-item">
+                        <div class="absolute -left-3.5 bg-slate-100 text-xs font-bold px-1 rounded border">W1-2</div>
+                        <h4 class="font-bold text-slate-800">Stabilization</h4>
+                        <p class="text-sm text-slate-600">Google Conversion Audit, URL Hygiene, LinkedIn Funnel Reset.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="absolute -left-3.5 bg-slate-100 text-xs font-bold px-1 rounded border">W3-4</div>
+                        <h4 class="font-bold text-slate-800">Baseline</h4>
+                        <p class="text-sm text-slate-600">Finalize Landing Pages, Match Type tightening.</p>
+                    </div>
+                    <div class="timeline-item phase-2">
+                        <div class="absolute -left-3.5 bg-slate-100 text-xs font-bold px-1 rounded border">W5-6</div>
+                        <h4 class="font-bold text-slate-800">Optimization</h4>
+                        <p class="text-sm text-slate-600">Shift to Phrase/Exact, Expand LinkedIn Audience.</p>
+                    </div>
+                    <div class="timeline-item phase-3">
+                        <div class="absolute -left-3.5 bg-slate-100 text-xs font-bold px-1 rounded border">W9-10</div>
+                        <h4 class="font-bold text-slate-800">Scaling</h4>
+                        <p class="text-sm text-slate-600">Paid Landing Pages, Scale BOF Budget.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 8: TECH STACK -->
+        <div id="page8" class="page-section max-w-5xl mx-auto">
+            <header class="mb-10">
+                <h2 class="text-3xl font-bold text-slate-900">Technology Ecosystem</h2>
+            </header>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="card p-6 text-center">
+                    <i class="fas fa-hubspot text-3xl text-orange-500 mb-3"></i>
+                    <h3 class="font-bold">HubSpot</h3>
+                    <p class="text-sm text-slate-600">Source of Truth</p>
+                </div>
+                <div class="card p-6 text-center">
+                    <i class="fas fa-chart-bar text-3xl text-yellow-500 mb-3"></i>
+                    <h3 class="font-bold">GA4</h3>
+                    <p class="text-sm text-slate-600">Attribution</p>
+                </div>
+                <div class="card p-6 text-center">
+                    <i class="fas fa-bullseye text-3xl text-purple-600 mb-3"></i>
+                    <h3 class="font-bold">6Sense</h3>
+                    <p class="text-sm text-slate-600">Intent Data</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 9: RISKS -->
+        <div id="page9" class="page-section max-w-5xl mx-auto">
+            <header class="mb-10">
+                <h2 class="text-3xl font-bold text-slate-900">Risks & Mitigation</h2>
+            </header>
+            <div class="space-y-4">
+                <div class="card p-4 border-l-4 border-red-500 bg-red-50">
+                    <h4 class="font-bold text-red-800">Risk: Feast or Famine Spending</h4>
+                    <p class="text-sm text-red-700">Mitigation: Strict daily budget caps.</p>
+                </div>
+                <div class="card p-4 border-l-4 border-orange-500 bg-orange-50">
+                    <h4 class="font-bold text-orange-800">Risk: Broad Match Waste</h4>
+                    <p class="text-sm text-orange-700">Mitigation: Negative keywords & Audience layering.</p>
                 </div>
             </div>
         </div>
@@ -455,23 +516,16 @@
 
     <!-- SCRIPTS -->
     <script>
-        // --- Navigation Logic ---
+        // Navigation Logic
         function showPage(pageId) {
-            // Hide all pages
-            document.querySelectorAll('.page-section').forEach(page => {
-                page.classList.remove('active');
-            });
-            // Show selected page
+            document.querySelectorAll('.page-section').forEach(page => page.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
-
-            // Update Nav Links
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('active');
-            });
+            
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
             document.getElementById('nav-' + pageId).classList.add('active');
         }
 
-        // --- Chart Helper (Label Wrapping) ---
+        // Label Wrapping for Charts
         function formatLabel(str, maxwidth) {
             if (typeof str !== 'string') return str;
             var sections = [];
@@ -490,9 +544,7 @@
                     temp = item;
                 }
             });
-            if (temp.length > 0) {
-                sections.push(temp);
-            }
+            if (temp.length > 0) sections.push(temp);
             return sections;
         }
 
@@ -501,20 +553,16 @@
             maintainAspectRatio: false,
             plugins: {
                 legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } },
-                tooltip: {
-                    callbacks: {
-                        title: function(tooltipItems) {
-                            const item = tooltipItems[0];
-                            let label = item.chart.data.labels ? item.chart.data.labels[item.dataIndex] : (item.raw.label || '');
-                            if (Array.isArray(label)) return label.join(' ');
-                            return label;
-                        }
-                    }
-                }
+                tooltip: { callbacks: { title: function(items) { 
+                    const item = items[0];
+                    let label = item.chart.data.labels ? item.chart.data.labels[item.dataIndex] : (item.raw.label || '');
+                    if (Array.isArray(label)) return label.join(' ');
+                    return label;
+                }}}
             }
         };
 
-        // --- Budget Chart ---
+        // Budget Chart
         const budgetCtx = document.getElementById('budgetChart').getContext('2d');
         new Chart(budgetCtx, {
             type: 'doughnut',
@@ -529,7 +577,7 @@
             options: { ...commonOptions, cutout: '70%' }
         });
 
-        // --- Keyword Chart ---
+        // Keyword Chart
         const keywordCtx = document.getElementById('keywordChart').getContext('2d');
         new Chart(keywordCtx, {
             type: 'scatter',
