@@ -18,14 +18,17 @@
             --color-secondary: #06B6D4; /* Cyan/Teal */
             --color-accent: #F59E0B;    /* Amber/Gold */
             --bg-sidebar: #0F172A;      /* Slate 900 */
-            --bg-content: #F8FAFC;      /* Slate 50 */
+            --bg-content: #FFFFFF;      /* White */
         }
 
         body {
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-content);
             color: #334155;
-            overflow: hidden; /* Prevent body scroll for sidebar layout */
+            overflow: hidden;
+            margin: 0;
+            display: flex;
+            height: 100vh;
         }
 
         /* --- Sidebar Styling --- */
@@ -42,12 +45,14 @@
         .nav-link {
             display: flex;
             align-items: center;
-            padding: 0.75rem 1.5rem;
-            font-size: 0.875rem;
+            padding: 0.85rem 1.5rem;
+            font-size: 0.9rem;
             font-weight: 500;
             transition: all 0.2s ease;
             border-left: 4px solid transparent;
             color: #94A3B8;
+            text-decoration: none;
+            cursor: pointer;
         }
 
         .nav-link:hover {
@@ -72,15 +77,16 @@
             flex: 1;
             height: 100vh;
             overflow-y: auto;
-            padding: 2rem 3rem;
+            padding: 3rem 4rem; /* Increased padding for better readability */
             background-color: white;
         }
 
         /* --- Page Transitions --- */
         .page-section {
             display: none;
-            animation: fadeIn 0.3s ease-in-out;
+            animation: fadeIn 0.4s ease-in-out;
         }
+
         .page-section.active {
             display: block;
         }
@@ -90,13 +96,14 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* --- Card Styles (Consistent with previous) --- */
+        /* --- Card Components --- */
         .card {
             background-color: white;
             border-radius: 0.75rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             border: 1px solid #E2E8F0;
             margin-bottom: 1.5rem;
+            padding: 1.5rem;
         }
 
         /* --- Chart Container --- */
@@ -107,30 +114,56 @@
             max-height: 400px;
         }
 
-        /* --- Timeline Items --- */
-        .timeline-item {
-            position: relative;
-            padding-left: 2rem;
-            border-left: 2px solid #E2E8F0;
-            margin-bottom: 2rem;
-        }
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -0.55rem;
-            top: 0.25rem;
-            width: 1rem;
-            height: 1rem;
-            border-radius: 50%;
-            background-color: white;
-            border: 3px solid var(--color-primary);
+        /* --- FUNNEL STYLES --- */
+        .funnel-row {
+            display: flex;
+            margin-bottom: 12px;
+            align-items: stretch;
         }
         
-        /* Variants for Timeline */
-        .timeline-item.phase-2 { border-left-color: var(--color-secondary); }
-        .timeline-item.phase-2::before { border-color: var(--color-secondary); }
-        .timeline-item.phase-3 { border-left-color: var(--color-accent); }
-        .timeline-item.phase-3::before { border-color: var(--color-accent); }
+        .funnel-shape {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border-radius: 8px 0 0 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+            position: relative;
+            z-index: 10;
+        }
+
+        .funnel-detail {
+            flex: 1;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-left: none;
+            border-radius: 0 8px 8px 0;
+            padding: 15px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .funnel-w-100 { width: 180px; }
+        .funnel-w-85  { width: 165px; margin-left: 7.5px; }
+        .funnel-w-70  { width: 150px; margin-left: 15px; }
+        .funnel-w-55  { width: 135px; margin-left: 22.5px; }
+        .funnel-w-base { width: 180px; }
+
+        /* --- URL Tag Style --- */
+        .url-tag {
+            background-color: #EFF6FF;
+            color: #1D4ED8;
+            font-family: monospace;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            border: 1px solid #DBEAFE;
+        }
 
     </style>
 </head>
@@ -145,40 +178,24 @@
         
         <nav class="flex-1 py-4 space-y-1 overflow-y-auto">
             <div class="px-6 py-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Strategy</div>
-            <a href="#" onclick="showPage('page1')" id="nav-page1" class="nav-link active">
+            <a onclick="showPage('page1')" id="nav-page1" class="nav-link active">
                 <i class="fas fa-home nav-icon"></i> Executive Summary
             </a>
-            <a href="#" onclick="showPage('page2')" id="nav-page2" class="nav-link">
-                <i class="fab fa-google nav-icon"></i> Google Ads Roadmap
-            </a>
-            <a href="#" onclick="showPage('page3')" id="nav-page3" class="nav-link">
-                <i class="fab fa-linkedin nav-icon"></i> LinkedIn Ads Roadmap
-            </a>
-            <a href="#" onclick="showPage('page4')" id="nav-page4" class="nav-link">
-                <i class="fas fa-chart-pie nav-icon"></i> Media Plan & Budget
-            </a>
-            <a href="#" onclick="showPage('page5')" id="nav-page5" class="nav-link">
-                <i class="fas fa-search nav-icon"></i> Keyword Intelligence
-            </a>
-            <a href="#" onclick="showPage('page6')" id="nav-page6" class="nav-link">
-                <i class="fas fa-pencil-ruler nav-icon"></i> Creative & KPIs
-            </a>
             
-            <div class="px-6 py-2 mt-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Execution</div>
-            <a href="#" onclick="showPage('page7')" id="nav-page7" class="nav-link">
-                <i class="fas fa-list-check nav-icon"></i> Master Timeline
-            </a>
-            <a href="#" onclick="showPage('page8')" id="nav-page8" class="nav-link">
-                <i class="fas fa-layer-group nav-icon"></i> Tech Stack
-            </a>
-            <a href="#" onclick="showPage('page9')" id="nav-page9" class="nav-link">
-                <i class="fas fa-shield-alt nav-icon"></i> Risks & Mitigation
-            </a>
-        </nav>
+            <div class="px-6 py-2 mt-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Full Funnel Deep Dive</div>
+            <a onclick="showPage('page2')" id="nav-page2" class="nav-link"><i class="fas fa-filter nav-icon"></i> Funnel Overview</a>
+            <a onclick="showPage('page3')" id="nav-page3" class="nav-link"><i class="fas fa-bullhorn nav-icon"></i> TOF: Awareness</a>
+            <a onclick="showPage('page4')" id="nav-page4" class="nav-link"><i class="fas fa-sync nav-icon"></i> MOF: Interest & Consider</a>
+            <a onclick="showPage('page5')" id="nav-page5" class="nav-link"><i class="fas fa-check-circle nav-icon"></i> BOF: Convert & Retain</a>
 
-        <div class="p-4 border-t border-slate-800 text-xs text-slate-600 text-center">
-            Feb 2026 Edition
-        </div>
+            <div class="px-6 py-2 mt-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Channel Execution</div>
+            <a onclick="showPage('page6')" id="nav-page6" class="nav-link"><i class="fab fa-google nav-icon"></i> Google Ads Roadmap</a>
+            <a onclick="showPage('page7')" id="nav-page7" class="nav-link"><i class="fab fa-linkedin nav-icon"></i> LinkedIn Ads Roadmap</a>
+            <a onclick="showPage('page8')" id="nav-page8" class="nav-link"><i class="fas fa-chart-pie nav-icon"></i> Media Plan & Budget</a>
+            
+            <div class="px-6 py-2 mt-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Tactics & Data</div>
+            <a onclick="showPage('page9')" id="nav-page9" class="nav-link"><i class="fas fa-search nav-icon"></i> Keywords</a>
+        </nav>
     </aside>
 
     <!-- MAIN CONTENT -->
@@ -195,320 +212,456 @@
                 <div class="card p-6 border-t-4 border-blue-600">
                     <div class="text-sm font-bold text-slate-400 uppercase">Phase 1 (Days 1-30)</div>
                     <div class="text-3xl font-bold text-blue-600 my-2">Stabilize</div>
-                    <p class="text-sm text-slate-600">Fix tracking, stop budget bleed, and audit URLs.</p>
+                    <p class="text-sm text-slate-600">Focus on technical hygiene: fixing conversion tracking, auditing URLs, and stopping budget bleed on broad terms.</p>
                 </div>
                 <div class="card p-6 border-t-4 border-cyan-500">
                     <div class="text-sm font-bold text-slate-400 uppercase">Phase 2 (Days 31-60)</div>
                     <div class="text-3xl font-bold text-cyan-600 my-2">Optimize</div>
-                    <p class="text-sm text-slate-600">Refine match types and test psychological creative hooks.</p>
+                    <p class="text-sm text-slate-600">Shift to Phrase/Exact match, expand LinkedIn audiences to FinTech/Insurance, and test psychological creative hooks.</p>
                 </div>
                 <div class="card p-6 border-t-4 border-amber-500">
                     <div class="text-sm font-bold text-slate-400 uppercase">Phase 3 (Days 61-90)</div>
                     <div class="text-3xl font-bold text-amber-500 my-2">Scale</div>
-                    <p class="text-sm text-slate-600">Launch paid landing pages and enable smart bidding.</p>
+                    <p class="text-sm text-slate-600">Launch paid landing pages, enable Target CPA (tCPA) smart bidding, and align ad data with closed revenue.</p>
                 </div>
             </div>
 
+            <!-- CORE OBJECTIVES -->
             <div class="card p-8 bg-slate-50 border-0">
-                <h3 class="text-xl font-bold text-slate-800 mb-4">Core Objectives</h3>
-                <div class="space-y-4">
-                    <div class="flex">
-                        <div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">1</div>
-                        <div class="ml-4">
-                            <h4 class="text-lg font-bold text-slate-800">Data Integrity</h4>
-                            <p class="text-slate-600">Eliminate "vanity metrics". Restrict primary conversions to high-intent actions only (Demo Requests).</p>
+                <h3 class="text-xl font-bold text-slate-800 mb-6">Core Objectives</h3>
+                <div class="space-y-6">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-lg mt-1">1</div>
+                        <div class="ml-5">
+                            <h4 class="text-lg font-bold text-slate-800 mb-2">Data Integrity & Value-Based Measurement</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                Shift the measurement framework from volume-based "vanity metrics" (e.g., PDF downloads) to value-based outcomes. We will restrict Primary Conversions in ad platforms to high-intent actions—specifically <strong>Demo Requests</strong> and <strong>Contact Sales</strong>—ensuring smart bidding algorithms optimize purely for revenue-generating events.
+                            </p>
                         </div>
                     </div>
-                    <div class="flex">
-                        <div class="flex-shrink-0 h-10 w-10 rounded-full bg-cyan-100 flex items-center justify-center text-cyan-600 font-bold">2</div>
-                        <div class="ml-4">
-                            <h4 class="text-lg font-bold text-slate-800">Pipeline Alignment</h4>
-                            <p class="text-slate-600">Shift LinkedIn targeting from broad job titles to strict ABM lists using "AND" logic.</p>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 h-10 w-10 rounded-full bg-cyan-100 flex items-center justify-center text-cyan-600 font-bold text-lg mt-1">2</div>
+                        <div class="ml-5">
+                            <h4 class="text-lg font-bold text-slate-800 mb-2">Precision Targeting & ABM Alignment</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                Eliminate budget wastage on unqualified audiences by refining LinkedIn targeting logic. We will transition from "Job Title OR Account" to a strict <strong>"Job Title AND Account List"</strong> structure, guaranteeing that impressions are delivered exclusively to key decision-makers within our defined Tier-1 ABM accounts.
+                            </p>
                         </div>
                     </div>
-                    <div class="flex">
-                        <div class="flex-shrink-0 h-10 w-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 font-bold">3</div>
-                        <div class="ml-4">
-                            <h4 class="text-lg font-bold text-slate-800">Budget Efficiency</h4>
-                            <p class="text-slate-600">Focus 80% of the $14k budget on high-intent pillars: Compliance & Regulatory Change.</p>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 h-10 w-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 font-bold text-lg mt-1">3</div>
+                        <div class="ml-5">
+                            <h4 class="text-lg font-bold text-slate-800 mb-2">Budget Efficiency & Pillar Focus</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                Maximize the impact of the $14k monthly budget by concentrating capital on high-performance areas. We will allocate <strong>80% of spend</strong> to the "Compliance Management" and "Regulatory Change" pillars where intent is highest, while implementing strict caps on broad, experimental, or low-converting campaigns.
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- PAGE 2: GOOGLE ADS -->
+        <!-- PAGE 2: FUNNEL OVERVIEW -->
         <div id="page2" class="page-section max-w-5xl mx-auto">
+            <header class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-900">Funnel Overview & Messaging</h2>
+                <p class="text-slate-500">The MCO Buyer Journey Framework</p>
+            </header>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Visual Funnel -->
+                <div class="card p-6 border-0 shadow-none">
+                    <h3 class="font-bold text-slate-700 mb-4 uppercase text-sm tracking-wide">Funnel Stages</h3>
+                    <div class="space-y-2">
+                        <div class="funnel-row !mb-2"><div class="funnel-shape bg-blue-600 funnel-w-100 text-sm">Awareness (TOF)</div><div class="funnel-detail py-2"><span class="text-xs font-bold text-blue-700">Introduce the Brand</span></div></div>
+                        <div class="funnel-row !mb-2"><div class="funnel-shape bg-cyan-500 funnel-w-85 text-sm">Interest (MOF)</div><div class="funnel-detail py-2"><span class="text-xs font-bold text-cyan-700">Educate & Generate Curiosity</span></div></div>
+                        <div class="funnel-row !mb-2"><div class="funnel-shape bg-teal-500 funnel-w-70 text-sm">Consideration (MOF)</div><div class="funnel-detail py-2"><span class="text-xs font-bold text-teal-700">Convert Interest to Leads</span></div></div>
+                        <div class="funnel-row !mb-2"><div class="funnel-shape bg-green-600 funnel-w-55 text-sm">Conversion (BOF)</div><div class="funnel-detail py-2"><span class="text-xs font-bold text-green-700">Drive Deals</span></div></div>
+                        <div class="funnel-row !mb-2"><div class="funnel-shape bg-purple-600 funnel-w-base text-sm !rounded">Retention (BOF)</div><div class="funnel-detail py-2 !ml-0 !rounded"><span class="text-xs font-bold text-purple-700">Stay Connected</span></div></div>
+                    </div>
+                </div>
+
+                <!-- Messaging Matrix -->
+                <div class="card p-6 bg-slate-50 border-slate-200">
+                    <h3 class="font-bold text-slate-700 mb-4 uppercase text-sm tracking-wide">Messaging Framework</h3>
+                    <div class="space-y-4">
+                        <div class="border-l-4 border-blue-600 pl-3"><div class="text-xs font-bold text-blue-600">AWARENESS</div><p class="text-sm font-semibold italic">"Modern compliance starts here."</p></div>
+                        <div class="border-l-4 border-cyan-500 pl-3"><div class="text-xs font-bold text-cyan-600">INTEREST</div><p class="text-sm font-semibold italic">"Best practices for compliance leaders."</p></div>
+                        <div class="border-l-4 border-teal-500 pl-3"><div class="text-xs font-bold text-teal-600">CONSIDERATION</div><p class="text-sm font-semibold italic">"See how MCO solves real challenges."</p></div>
+                        <div class="border-l-4 border-green-600 pl-3"><div class="text-xs font-bold text-green-600">CONVERSION</div><p class="text-sm font-semibold italic">"Get started with a personalized demo."</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 3: TOF STRATEGY -->
+        <div id="page3" class="page-section max-w-5xl mx-auto">
+            <header class="mb-8 border-l-4 border-blue-500 pl-6">
+                <h2 class="text-3xl font-bold text-slate-900">Top of Funnel (TOF)</h2>
+                <p class="text-slate-500">Awareness & Interest Strategy</p>
+            </header>
+
+            <!-- AWARENESS -->
+            <div class="card p-6 mb-8 border-t-4 border-blue-600">
+                <div class="flex justify-between mb-4">
+                    <h3 class="text-xl font-bold text-slate-800">1. Awareness</h3>
+                    <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-bold">Goal: Introduce the Brand</span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                    <div>
+                        <h4 class="font-bold text-slate-700 mb-2 border-b pb-1">Channels & Targeting</h4>
+                        <ul class="list-disc pl-4 space-y-1 text-slate-600">
+                            <li><strong>Google:</strong> Display + YouTube (15-30s explainer)</li>
+                            <li><strong>LinkedIn:</strong> Sponsored Video ("Stop compliance silos")</li>
+                            <li><strong>Target:</strong> CCO, CRO, Head of Risk in Banking, Asset Mgmt, FinTech.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-700 mb-2 border-b pb-1">Key Assets (URLs)</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="url-tag">/ (Homepage)</span>
+                            <span class="url-tag">/about-us</span>
+                            <span class="url-tag">/about-us/news</span>
+                        </div>
+                        <p class="mt-2 text-slate-500 italic">"Modernize your compliance program with a unified platform."</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INTEREST -->
+            <div class="card p-6 border-t-4 border-cyan-500">
+                <div class="flex justify-between mb-4">
+                    <h3 class="text-xl font-bold text-slate-800">2. Interest</h3>
+                    <span class="bg-cyan-100 text-cyan-800 text-xs px-2 py-1 rounded-full font-bold">Goal: Educate & Generate Curiosity</span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                    <div>
+                        <h4 class="font-bold text-slate-700 mb-2 border-b pb-1">Channels & Targeting</h4>
+                        <ul class="list-disc pl-4 space-y-1 text-slate-600">
+                            <li><strong>LinkedIn:</strong> Sponsored Content (Blog spotlights)</li>
+                            <li><strong>Google Search:</strong> Informational queries ("benefits of compliance software")</li>
+                            <li><strong>Retargeting:</strong> Users who visited Homepage/About.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-700 mb-2 border-b pb-1">Key Assets (URLs)</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="url-tag">/blog</span>
+                            <span class="url-tag">/webinars</span>
+                            <span class="url-tag">/resource-library</span>
+                        </div>
+                        <p class="mt-2 text-slate-500 italic">"What compliance leaders need to know about eComms surveillance in 2026."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 4: MOF STRATEGY -->
+        <div id="page4" class="page-section max-w-5xl mx-auto">
+            <header class="mb-8 border-l-4 border-teal-500 pl-6">
+                <h2 class="text-3xl font-bold text-slate-900">Middle of Funnel (MOF)</h2>
+                <p class="text-slate-500">Interest & Consideration: Retargeting & Capture</p>
+            </header>
+
+            <!-- INTEREST -->
+            <div class="card p-6 mb-6 border-l-4 border-cyan-500">
+                <h3 class="text-lg font-bold text-slate-800 mb-2">Interest <span class="text-sm font-normal text-slate-500 ml-2">(Educate)</span></h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div>
+                        <strong class="block text-slate-700 mb-1">Strategic Approach:</strong>
+                        <p class="text-slate-600">Engage users with thought leadership. On LinkedIn, promote blog spotlights on <strong>'Regulatory Change'</strong> and <strong>'Compliance Risk'</strong> to build credibility before asking for a demo.</p>
+                        <p class="text-slate-600 mt-2"><strong>Retargeting:</strong> Re-engage visitors who viewed the Homepage but did not convert.</p>
+                    </div>
+                    <div>
+                        <strong class="block text-slate-700 mb-1">Key Assets:</strong>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="url-tag">/blog</span>
+                            <span class="url-tag">/resource-library</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONSIDERATION -->
+            <div class="card p-6 border-l-4 border-teal-500">
+                <h3 class="text-lg font-bold text-slate-800 mb-2">Consideration <span class="text-sm font-normal text-slate-500 ml-2">(Capture Leads)</span></h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div>
+                        <strong class="block text-slate-700 mb-1">Strategic Approach:</strong>
+                        <p class="text-slate-600">Activate high-value retargeting. Users who visited <strong>'/solutions/communications-compliance'</strong> but didn't convert will be targeted with LinkedIn Lead Gen Forms offering deep-dive playbooks, reducing friction by pre-filling user data.</p>
+                    </div>
+                    <div>
+                        <strong class="block text-slate-700 mb-1">Target URLs:</strong>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="url-tag">/solutions/communications-compliance</span>
+                            <span class="url-tag">/know-your-employee</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 5: BOF STRATEGY -->
+        <div id="page5" class="page-section max-w-5xl mx-auto">
+            <header class="mb-8 border-l-4 border-green-500 pl-6">
+                <h2 class="text-3xl font-bold text-slate-900">Bottom of Funnel (BOF)</h2>
+                <p class="text-slate-500">Conversion & Retention: Close & Nurture</p>
+            </header>
+
+            <!-- CONVERSION -->
+            <div class="card p-6 mb-6 border-l-4 border-green-600 bg-green-50 border-opacity-50">
+                <h3 class="text-lg font-bold text-slate-800 mb-2">Conversion <span class="text-sm font-normal text-slate-500 ml-2">(Drive Deals)</span></h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div>
+                        <strong class="block text-slate-700 mb-1">Strategic Approach:</strong>
+                        <p class="text-slate-600">Capture high-intent demand. Bid aggressively on <strong>'Regulatory Change Management Software'</strong> ($62 CPC) and <strong>'Compliance Risk Assessment'</strong> ($88 CPC) using Exact Match. Direct traffic to the high-converting <strong>'/company/contact-us'</strong> page (which generates 1,592 key events).</p>
+                    </div>
+                    <div>
+                        <strong class="block text-slate-700 mb-1">Target URLs:</strong>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="url-tag">/company/contact-us</span>
+                            <span class="url-tag">/demo-request</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RETENTION -->
+            <div class="card p-6 border-l-4 border-purple-600">
+                <h3 class="text-lg font-bold text-slate-800 mb-2">Retention <span class="text-sm font-normal text-slate-500 ml-2">(Nurture)</span></h3>
+                <p class="text-sm text-slate-600 mb-2">Maximize customer lifetime value (LTV). Use email nurtures and LinkedIn Matched Audiences to cross-sell new modules like <strong>'Trade Surveillance'</strong> to existing clients.</p>
+            </div>
+        </div>
+
+        <!-- PAGE 6: GOOGLE ADS ROADMAP -->
+        <div id="page6" class="page-section max-w-5xl mx-auto">
             <header class="mb-10">
                 <h2 class="text-3xl font-bold text-slate-900">Google Ads Roadmap</h2>
                 <p class="text-slate-500">Paid Search Execution Plan</p>
             </header>
 
             <div class="space-y-6">
-                <!-- M1 -->
+                <!-- Month 1 -->
                 <div class="card overflow-hidden">
                     <div class="bg-blue-600 px-6 py-4 flex justify-between items-center text-white">
-                        <h3 class="font-bold text-lg">Month 1: The Fix</h3>
+                        <h3 class="font-bold text-lg">Month 1: The Fix (Stabilization)</h3>
                         <span class="bg-blue-800 text-xs px-2 py-1 rounded">Weeks 1-4</span>
                     </div>
                     <div class="p-6">
                         <ul class="space-y-4">
                             <li class="flex items-start">
                                 <i class="fas fa-check-circle text-blue-600 mt-1 mr-3"></i>
-                                <div><strong class="block text-slate-800">Conversion Audit</strong><span class="text-sm text-slate-600">Move "PDF Downloads" to Secondary. Keep only "Book Demo".</span></div>
+                                <div>
+                                    <strong class="block text-slate-800">Conversion Audit & Cleanup</strong>
+                                    <span class="text-sm text-slate-600">This is the critical first step. We will audit GA4 and Google Ads conversion events to differentiate between "soft" conversions (PDF downloads) and "hard" conversions (Demo Requests). By marking only "Book Demo" as Primary, we ensure the smart bidding algorithms optimize for revenue-generating actions rather than just volume.</span>
+                                </div>
                             </li>
                             <li class="flex items-start">
                                 <i class="fas fa-check-circle text-blue-600 mt-1 mr-3"></i>
-                                <div><strong class="block text-slate-800">URL Hygiene</strong><span class="text-sm text-slate-600">Audit Final URLs for 404s. Implement 301 redirects.</span></div>
+                                <div>
+                                    <strong class="block text-slate-800">URL Hygiene</strong>
+                                    <span class="text-sm text-slate-600">A full crawl of active ad destination URLs will be conducted. Any 404 errors (broken links) waste budget immediately. We will implement 301 redirects for any legacy product pages to ensure every click lands on a live, relevant page.</span>
+                                </div>
                             </li>
                             <li class="flex items-start">
                                 <i class="fas fa-check-circle text-blue-600 mt-1 mr-3"></i>
-                                <div><strong class="block text-slate-800">Spend Stabilization</strong><span class="text-sm text-slate-600">Normalize daily budgets to prevent volatility.</span></div>
+                                <div>
+                                    <strong class="block text-slate-800">Spend Stabilization</strong>
+                                    <span class="text-sm text-slate-600">Erratic spending confuses Google's learning phase. We will implement consistent daily budget caps to smooth out spending, preventing "feast or famine" days that spike CPA without delivering results.</span>
+                                </div>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <!-- M2 -->
+
+                <!-- Month 2 -->
                 <div class="card overflow-hidden">
                     <div class="bg-cyan-600 px-6 py-4 flex justify-between items-center text-white">
-                        <h3 class="font-bold text-lg">Month 2: The Refine</h3>
+                        <h3 class="font-bold text-lg">Month 2: The Refine (Optimization)</h3>
                         <span class="bg-cyan-800 text-xs px-2 py-1 rounded">Weeks 5-8</span>
                     </div>
                     <div class="p-6">
                         <ul class="space-y-4">
                             <li class="flex items-start">
                                 <i class="fas fa-check-circle text-cyan-600 mt-1 mr-3"></i>
-                                <div><strong class="block text-slate-800">Match Type Constriction</strong><span class="text-sm text-slate-600">Move "Regulatory Change" keywords to Phrase/Exact match.</span></div>
+                                <div>
+                                    <strong class="block text-slate-800">Match Type Constriction</strong>
+                                    <span class="text-sm text-slate-600">We will transition core keywords (like "Regulatory Change Management") from Broad Match to Phrase and Exact Match. Broad match often pulls in irrelevant consumer queries; this shift ensures we only pay for B2B intent, improving our Cost Per Acquisition (CPA).</span>
+                                </div>
                             </li>
                             <li class="flex items-start">
                                 <i class="fas fa-check-circle text-cyan-600 mt-1 mr-3"></i>
-                                <div><strong class="block text-slate-800">Negative Mining</strong><span class="text-sm text-slate-600">Weekly exclusion of consumer terms (jobs, free).</span></div>
+                                <div>
+                                    <strong class="block text-slate-800">Search Term Mining</strong>
+                                    <span class="text-sm text-slate-600">Weekly analysis of search terms to identify wasted spend. We will aggressively add negative keywords for consumer-intent terms (e.g., "jobs," "free," "course," "definition") to refine the traffic quality further.</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-cyan-600 mt-1 mr-3"></i>
+                                <div>
+                                    <strong class="block text-slate-800">RSA Rebuild</strong>
+                                    <span class="text-sm text-slate-600">Responsive Search Ads (RSAs) will be rewritten to focus on specific pain points and solutions rather than generic features. Improving Ad Strength to "Good" or "Excellent" typically lowers CPCs by increasing Quality Score.</span>
+                                </div>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <!-- M3 -->
+
+                <!-- Month 3 -->
                 <div class="card overflow-hidden">
                     <div class="bg-amber-600 px-6 py-4 flex justify-between items-center text-white">
-                        <h3 class="font-bold text-lg">Month 3: The Scale</h3>
+                        <h3 class="font-bold text-lg">Month 3: The Scale (Growth)</h3>
                         <span class="bg-amber-800 text-xs px-2 py-1 rounded">Weeks 9-12</span>
                     </div>
                     <div class="p-6">
                         <ul class="space-y-4">
                             <li class="flex items-start">
                                 <i class="fas fa-check-circle text-amber-600 mt-1 mr-3"></i>
-                                <div><strong class="block text-slate-800">Paid Landing Pages</strong><span class="text-sm text-slate-600">Launch dedicated pages (no nav) for top keywords.</span></div>
+                                <div>
+                                    <strong class="block text-slate-800">Paid Landing Pages</strong>
+                                    <span class="text-sm text-slate-600">We will launch dedicated landing pages for the top 20% of high-volume keywords. These pages will have no navigation bar (to prevent leakiness) and will focus entirely on the value proposition and the "Book Demo" form, significantly boosting conversion rates.</span>
+                                </div>
                             </li>
                             <li class="flex items-start">
                                 <i class="fas fa-check-circle text-amber-600 mt-1 mr-3"></i>
-                                <div><strong class="block text-slate-800">Smart Bidding</strong><span class="text-sm text-slate-600">Enable Target CPA (tCPA) once conversion volume is stable.</span></div>
+                                <div>
+                                    <strong class="block text-slate-800">Smart Bidding Activation</strong>
+                                    <span class="text-sm text-slate-600">With 60 days of clean conversion data now available, we will switch campaigns to Target CPA (tCPA) bidding. This allows Google's AI to bid more aggressively for users most likely to convert, maximizing the return on our ad spend.</span>
+                                </div>
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
+
+            <!-- GOOGLE ADS CTA BUTTON -->
+            <div class="mt-12 text-center">
+                <a href="https://growthnatives872-my.sharepoint.com/:x:/r/personal/shahzad_musawwir_growthnatives_com/_layouts/15/Doc.aspx?sourcedoc=%7B7C0EC822-6396-4D50-9CD9-CF3343278906%7D&file=MCO%20-%2030%20-%2060%20-%2090%20Days%20Plan%20-%20Paid%20Ads.xlsx&action=default&mobileredirect=true" target="_blank" class="inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:-translate-y-1">
+                    See Detailed Roadmap <i class="fas fa-external-link-alt ml-2"></i>
+                </a>
+            </div>
         </div>
 
-        <!-- PAGE 3: LINKEDIN ADS -->
-        <div id="page3" class="page-section max-w-5xl mx-auto">
+        <!-- PAGE 7: LINKEDIN ADS ROADMAP -->
+        <div id="page7" class="page-section max-w-5xl mx-auto">
             <header class="mb-10">
                 <h2 class="text-3xl font-bold text-slate-900">LinkedIn Ads Roadmap</h2>
                 <p class="text-slate-500">Paid Social & ABM Strategy</p>
             </header>
 
-            <div class="space-y-6">
+            <div class="space-y-8 h-full flex flex-col justify-center">
                 <div class="card p-6 border-l-4 border-blue-600">
-                    <h3 class="text-xl font-bold text-slate-800 mb-3">Phase 1: Foundation</h3>
-                    <p class="text-slate-600 mb-4">Switch targeting logic to <strong>Job Title AND Account List</strong> to eliminate waste.</p>
+                    <h3 class="text-xl font-bold text-slate-800 mb-4">Phase 1: Foundation (The "AND" Fix)</h3>
+                    <p class="text-slate-600 mb-4 text-sm">The primary issue identified is loose targeting logic. Currently, campaigns may be using "Job Title OR Account List," which allows irrelevant employees (e.g., interns at a target bank) to see ads. We will switch all campaigns to <strong>"Job Title AND Account List"</strong> logic. This ensures every impression serves a specific decision-maker at a specific target account, drastically improving spend efficiency.</p>
                     <div class="grid grid-cols-2 gap-4 text-sm">
-                        <div class="bg-slate-50 p-3 rounded"><strong>Funnel Reset:</strong> Separate TOF/MOF/BOF.</div>
-                        <div class="bg-slate-50 p-3 rounded"><strong>Creative:</strong> Pause duplicates, set baseline.</div>
+                        <div class="bg-slate-50 p-4 rounded border">
+                            <strong>Funnel Reset:</strong>
+                            <p class="text-xs text-slate-500 mt-1">We will restructure campaigns into distinct TOF (Awareness), MOF (Case Studies), and BOF (Demo Request) layers to ensure appropriate messaging for each stage of the buyer journey.</p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded border">
+                            <strong>Creative Baseline:</strong>
+                            <p class="text-xs text-slate-500 mt-1">Duplicate creatives will be paused. We will select one "control" creative per concept to establish a reliable performance baseline for future A/B testing.</p>
+                        </div>
                     </div>
                 </div>
                 
                 <div class="card p-6 border-l-4 border-cyan-500">
                     <h3 class="text-xl font-bold text-slate-800 mb-3">Phase 2: Expansion</h3>
-                    <ul class="list-disc pl-5 text-slate-600 space-y-2">
-                        <li>Expand to Asset Management & FinTech.</li>
-                        <li>Test "Risk Reduction" vs "Audit Readiness" messaging.</li>
-                    </ul>
+                    <p class="text-slate-600 mb-3 text-sm">Once the core Investment Banking audience is stabilized, we will expand our reach. We will launch dedicated campaigns targeting the <strong>Asset Management, Insurance, and FinTech</strong> sectors to identify new Total Addressable Market (TAM). Simultaneously, we will begin A/B testing messaging hooks: "Risk Reduction" (fear-based) vs. "Audit Readiness" (benefit-based).</p>
                 </div>
 
                 <div class="card p-6 border-l-4 border-amber-500">
                     <h3 class="text-xl font-bold text-slate-800 mb-3">Phase 3: ROI Alignment</h3>
-                    <ul class="list-disc pl-5 text-slate-600 space-y-2">
-                        <li>Shift budget to BOF (Demo) campaigns.</li>
-                        <li>Map LinkedIn data to HubSpot "Pipeline Influenced".</li>
-                    </ul>
+                    <p class="text-slate-600 mb-3 text-sm">With a refined audience and validated messaging, we will shift the majority of the budget towards Bottom-of-Funnel (BOF) campaigns to drive Demo requests. Crucially, we will integrate LinkedIn campaign data with HubSpot to track <strong>"Pipeline Influenced"</strong>—measuring success by deal value created, not just lead volume.</p>
                 </div>
+            </div>
+
+            <!-- LINKEDIN ADS CTA BUTTON -->
+            <div class="mt-12 text-center">
+                <a href="https://growthnatives872-my.sharepoint.com/:x:/r/personal/shahzad_musawwir_growthnatives_com/_layouts/15/Doc.aspx?sourcedoc=%7B7C0EC822-6396-4D50-9CD9-CF3343278906%7D&file=MCO%20-%2030%20-%2060%20-%2090%20Days%20Plan%20-%20Paid%20Ads.xlsx&action=default&mobileredirect=true" target="_blank" class="inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:-translate-y-1">
+                    See Detailed Roadmap <i class="fas fa-external-link-alt ml-2"></i>
+                </a>
             </div>
         </div>
 
-        <!-- PAGE 4: BUDGET -->
-        <div id="page4" class="page-section max-w-5xl mx-auto">
-            <header class="mb-10">
-                <h2 class="text-3xl font-bold text-slate-900">Media Plan & Budget</h2>
-                <p class="text-lg text-slate-600">Monthly Allocation: <strong>$14,000</strong></p>
-            </header>
+        <!-- PAGE 8: BUDGET -->
+        <div id="page8" class="page-section max-w-5xl mx-auto">
+            <header class="mb-10"><h2 class="text-3xl font-bold text-slate-900">Media Plan ($14k)</h2></header>
+            
+            <div class="bg-blue-50 border-l-4 border-blue-600 p-4 mb-8 text-sm text-blue-800">
+                <strong class="block mb-1">Strategic Allocation Rationale:</strong>
+                We are adhering to an <strong>80/20 split</strong>. 80% of the budget ($11,200) is allocated to high-intent "Solution Seeking" pillars (Compliance, Regulatory Change, Risk) where users are actively looking for software. The remaining 20% covers Brand defense (to protect against competitors) and automated PMAX discovery to feed the funnel.
+            </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div>
-                    <h3 class="text-2xl font-bold text-slate-800 mb-4">Allocation Strategy</h3>
-                    <p class="text-slate-600 mb-6">
-                        Budget is heavily weighted (80%) towards high-intent users actively seeking solutions.
-                    </p>
-                    <div class="space-y-3">
-                        <div class="flex justify-between p-3 border rounded bg-white"><span>Compliance Mgmt</span><span class="font-bold text-blue-700">$4,200 (30%)</span></div>
-                        <div class="flex justify-between p-3 border rounded bg-white"><span>Reg Change Mgmt</span><span class="font-bold text-cyan-600">$3,500 (25%)</span></div>
-                        <div class="flex justify-between p-3 border rounded bg-white"><span>Risk & Compliance</span><span class="font-bold text-blue-500">$3,500 (25%)</span></div>
-                        <div class="flex justify-between p-3 border rounded bg-white"><span>Brand</span><span class="font-bold text-slate-500">$1,400 (10%)</span></div>
-                        <div class="flex justify-between p-3 border rounded bg-white"><span>PMAX (6Sense)</span><span class="font-bold text-amber-500">$1,400 (10%)</span></div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <div class="space-y-3">
+                    <div class="flex justify-between p-3 border rounded bg-white items-center">
+                        <div>
+                            <span class="block font-bold text-slate-800">Compliance Management</span>
+                            <span class="text-xs text-slate-500 block">Core Revenue Driver</span>
+                        </div>
+                        <span class="font-bold text-blue-700 text-lg">30%</span>
+                    </div>
+                    <div class="flex justify-between p-3 border rounded bg-white items-center">
+                        <div>
+                            <span class="block font-bold text-slate-800">Regulatory Change Mgmt</span>
+                            <span class="text-xs text-slate-500 block">High Strategic Value</span>
+                        </div>
+                        <span class="font-bold text-cyan-600 text-lg">25%</span>
+                    </div>
+                    <div class="flex justify-between p-3 border rounded bg-white items-center">
+                        <div>
+                            <span class="block font-bold text-slate-800">Risk & Compliance</span>
+                            <span class="text-xs text-slate-500 block">Problem Aware Users</span>
+                        </div>
+                        <span class="font-bold text-blue-500 text-lg">25%</span>
+                    </div>
+                    <div class="flex justify-between p-3 border rounded bg-white items-center">
+                        <div>
+                            <span class="block font-bold text-slate-800">Brand Protection</span>
+                            <span class="text-xs text-slate-500 block">Defensive Moat</span>
+                        </div>
+                        <span class="font-bold text-slate-500 text-lg">10%</span>
+                    </div>
+                    <div class="flex justify-between p-3 border rounded bg-white items-center">
+                        <div>
+                            <span class="block font-bold text-slate-800">PMAX (6Sense Audience)</span>
+                            <span class="text-xs text-slate-500 block">Automated Targeting</span>
+                        </div>
+                        <span class="font-bold text-amber-500 text-lg">10%</span>
                     </div>
                 </div>
-                <div class="card p-6">
-                    <div class="chart-container">
-                        <canvas id="budgetChart"></canvas>
-                    </div>
-                </div>
+                <div class="card p-6"><div class="chart-container"><canvas id="budgetChart"></canvas></div></div>
             </div>
         </div>
 
-        <!-- PAGE 5: KEYWORDS -->
-        <div id="page5" class="page-section max-w-5xl mx-auto">
-            <header class="mb-10">
-                <h2 class="text-3xl font-bold text-slate-900">Keyword Intelligence</h2>
-                <p class="text-slate-500">CPC vs Volume Analysis</p>
-            </header>
-
-            <div class="card p-6 mb-8">
-                <div class="chart-container">
-                    <canvas id="keywordChart"></canvas>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- PAGE 9: KEYWORDS -->
+        <div id="page9" class="page-section max-w-5xl mx-auto">
+            <header class="mb-10"><h2 class="text-3xl font-bold text-slate-900">Keyword Intelligence</h2></header>
+            <div class="card p-6 mb-8"><div class="chart-container"><canvas id="keywordChart"></canvas></div></div>
+            <div class="grid grid-cols-3 gap-6">
                 <div class="card p-4 border-t-4 border-blue-600">
-                    <h4 class="font-bold text-blue-800">The "Gold Mine"</h4>
-                    <p class="text-sm text-slate-600"><strong>Reg Change Mgmt:</strong> High intent, low competition.</p>
+                    <h4 class="font-bold text-blue-800 text-sm">Gold Mine</h4>
+                    <p class="text-xs text-slate-600 mb-2">High Intent, Low Competition</p>
+                    <p class="text-sm font-bold text-slate-800">Reg Change Mgmt ($62 CPC)</p>
                 </div>
                 <div class="card p-4 border-t-4 border-cyan-500">
-                    <h4 class="font-bold text-cyan-800">The "Volume Trap"</h4>
-                    <p class="text-sm text-slate-600"><strong>OCR Software:</strong> High volume (40k), risky intent.</p>
+                    <h4 class="font-bold text-cyan-800 text-sm">Volume Trap</h4>
+                    <p class="text-xs text-slate-600 mb-2">High Volume, Consumer Risk</p>
+                    <p class="text-sm font-bold text-slate-800">OCR Software (40k Vol)</p>
                 </div>
                 <div class="card p-4 border-t-4 border-amber-500">
-                    <h4 class="font-bold text-amber-800">Niche Premium</h4>
-                    <p class="text-sm text-slate-600"><strong>Trade Surveillance:</strong> $700+ CPC. Exact match only.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- PAGE 6: CREATIVE & KPIs -->
-        <div id="page6" class="page-section max-w-5xl mx-auto">
-            <header class="mb-10">
-                <h2 class="text-3xl font-bold text-slate-900">Creative & Measurement</h2>
-            </header>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                <div class="card p-6 text-center">
-                    <div class="text-3xl mb-2">⚠️</div>
-                    <h4 class="font-bold">Fear / Risk</h4>
-                    <p class="text-sm text-slate-600">"Don't Let Regulators Catch You Off Guard"</p>
-                </div>
-                <div class="card p-6 text-center">
-                    <div class="text-3xl mb-2">⏱️</div>
-                    <h4 class="font-bold">Efficiency</h4>
-                    <p class="text-sm text-slate-600">"Cut Compliance Admin Time by 40%"</p>
-                </div>
-                <div class="card p-6 text-center">
-                    <div class="text-3xl mb-2">🤝</div>
-                    <h4 class="font-bold">Trust</h4>
-                    <p class="text-sm text-slate-600">"The Standard in FinTech Compliance"</p>
+                    <h4 class="font-bold text-amber-800 text-sm">Niche Premium</h4>
+                    <p class="text-xs text-slate-600 mb-2">Ultra-Specific, High Cost</p>
+                    <p class="text-sm font-bold text-slate-800">Trade Surveillance ($16 CPC)</p>
                 </div>
             </div>
 
-            <div class="card p-8 bg-slate-900 text-slate-300 border-none">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                        <h4 class="text-white font-bold mb-4">Leading Indicators (Weekly)</h4>
-                        <ul class="space-y-2 text-sm"><li>CTR</li><li>Cost per Conversion</li><li>Impression Share</li></ul>
-                    </div>
-                    <div>
-                        <h4 class="text-white font-bold mb-4">Lagging Indicators (Monthly)</h4>
-                        <ul class="space-y-2 text-sm"><li>SQL Rate</li><li>Pipeline Influenced</li><li>CAC</li></ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- PAGE 7: MASTER TIMELINE -->
-        <div id="page7" class="page-section max-w-5xl mx-auto">
-            <header class="mb-10">
-                <h2 class="text-3xl font-bold text-slate-900">Master Execution Timeline</h2>
-            </header>
-            <div class="card p-8">
-                <div class="space-y-8">
-                    <div class="timeline-item">
-                        <div class="absolute -left-3.5 bg-slate-100 text-xs font-bold px-1 rounded border">W1-2</div>
-                        <h4 class="font-bold text-slate-800">Stabilization</h4>
-                        <p class="text-sm text-slate-600">Google Conversion Audit, URL Hygiene, LinkedIn Funnel Reset.</p>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="absolute -left-3.5 bg-slate-100 text-xs font-bold px-1 rounded border">W3-4</div>
-                        <h4 class="font-bold text-slate-800">Baseline</h4>
-                        <p class="text-sm text-slate-600">Finalize Landing Pages, Match Type tightening.</p>
-                    </div>
-                    <div class="timeline-item phase-2">
-                        <div class="absolute -left-3.5 bg-slate-100 text-xs font-bold px-1 rounded border">W5-6</div>
-                        <h4 class="font-bold text-slate-800">Optimization</h4>
-                        <p class="text-sm text-slate-600">Shift to Phrase/Exact, Expand LinkedIn Audience.</p>
-                    </div>
-                    <div class="timeline-item phase-3">
-                        <div class="absolute -left-3.5 bg-slate-100 text-xs font-bold px-1 rounded border">W9-10</div>
-                        <h4 class="font-bold text-slate-800">Scaling</h4>
-                        <p class="text-sm text-slate-600">Paid Landing Pages, Scale BOF Budget.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- PAGE 8: TECH STACK -->
-        <div id="page8" class="page-section max-w-5xl mx-auto">
-            <header class="mb-10">
-                <h2 class="text-3xl font-bold text-slate-900">Technology Ecosystem</h2>
-            </header>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="card p-6 text-center">
-                    <i class="fas fa-hubspot text-3xl text-orange-500 mb-3"></i>
-                    <h3 class="font-bold">HubSpot</h3>
-                    <p class="text-sm text-slate-600">Source of Truth</p>
-                </div>
-                <div class="card p-6 text-center">
-                    <i class="fas fa-chart-bar text-3xl text-yellow-500 mb-3"></i>
-                    <h3 class="font-bold">GA4</h3>
-                    <p class="text-sm text-slate-600">Attribution</p>
-                </div>
-                <div class="card p-6 text-center">
-                    <i class="fas fa-bullseye text-3xl text-purple-600 mb-3"></i>
-                    <h3 class="font-bold">6Sense</h3>
-                    <p class="text-sm text-slate-600">Intent Data</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- PAGE 9: RISKS -->
-        <div id="page9" class="page-section max-w-5xl mx-auto">
-            <header class="mb-10">
-                <h2 class="text-3xl font-bold text-slate-900">Risks & Mitigation</h2>
-            </header>
-            <div class="space-y-4">
-                <div class="card p-4 border-l-4 border-red-500 bg-red-50">
-                    <h4 class="font-bold text-red-800">Risk: Feast or Famine Spending</h4>
-                    <p class="text-sm text-red-700">Mitigation: Strict daily budget caps.</p>
-                </div>
-                <div class="card p-4 border-l-4 border-orange-500 bg-orange-50">
-                    <h4 class="font-bold text-orange-800">Risk: Broad Match Waste</h4>
-                    <p class="text-sm text-orange-700">Mitigation: Negative keywords & Audience layering.</p>
-                </div>
+            <!-- KEYWORDS CTA BUTTON -->
+            <div class="mt-12 text-center">
+                <a href="https://growthnatives872-my.sharepoint.com/:x:/r/personal/shahzad_musawwir_growthnatives_com/_layouts/15/Doc.aspx?sourcedoc=%7B7C0EC822-6396-4D50-9CD9-CF3343278906%7D&file=MCO%20-%2030%20-%2060%20-%2090%20Days%20Plan%20-%20Paid%20Ads.xlsx&action=default&mobileredirect=true" target="_blank" class="inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:-translate-y-1">
+                    See Keywords <i class="fas fa-external-link-alt ml-2"></i>
+                </a>
             </div>
         </div>
 
@@ -516,16 +669,14 @@
 
     <!-- SCRIPTS -->
     <script>
-        // Navigation Logic
         function showPage(pageId) {
             document.querySelectorAll('.page-section').forEach(page => page.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
-            
             document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
             document.getElementById('nav-' + pageId).classList.add('active');
         }
 
-        // Label Wrapping for Charts
+        // --- Chart Helper (Label Wrapping) ---
         function formatLabel(str, maxwidth) {
             if (typeof str !== 'string') return str;
             var sections = [];
@@ -567,7 +718,7 @@
         new Chart(budgetCtx, {
             type: 'doughnut',
             data: {
-                labels: ['Compliance Mgmt', 'Reg Change Mgmt', 'Risk & Comp', 'Brand', 'PMAX'].map(l => formatLabel(l, 15)),
+                labels: ['Compliance', 'Reg Change', 'Risk', 'Brand', 'PMAX'].map(l => formatLabel(l, 12)),
                 datasets: [{
                     data: [4200, 3500, 3500, 1400, 1400],
                     backgroundColor: ['#2563EB', '#06B6D4', '#3B82F6', '#94A3B8', '#F59E0B'],
@@ -602,7 +753,7 @@
             options: {
                 ...commonOptions,
                 scales: {
-                    x: { title: {display:true, text:'CPC ($)'} },
+                    x: { title: {display:true, text:'CPC ($)'}, min: 0 },
                     y: { type: 'logarithmic', title: {display:true, text:'Volume'} }
                 },
                 plugins: { ...commonOptions.plugins, legend: {display: false} }
